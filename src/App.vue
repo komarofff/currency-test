@@ -58,9 +58,7 @@
       </section>
     </div>
   </div>
-
   <GetDataFromBank :currencies="currencies" @getData="PutFinishData"></GetDataFromBank>
-
 </div>
 </template>
 

@@ -14,7 +14,6 @@ export default {
   data() {
     return {
       api: 'https://www.nbrb.by/api/exrates/rates',
-      data: null,
       listOfCurriencies: this.currencies,
       finishData: []
     }
