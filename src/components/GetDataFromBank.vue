@@ -1,30 +1,38 @@
 <template>
-  {{ listOfCurriencies}}
-  <button @click="getList()" class="bg-blue-700 text-white py-2 px-4 rounded "> Get data from bank</button>
+  {{ listOfCurriencies }}
+  <p>
+    <button @click="getList()" class="bg-blue-700 text-white py-2 px-4 rounded "> Get data from bank</button>
+  </p>
   <div
-  v-for="item in data"
-  >{{item.Cur_Name}} - {{ item.Cur_Abbreviation}} - {{item.Cur_Scale}}</div>
+      v-for="item in finishData">{{ item }}
+  </div>
 </template>
 
 <script>
 import axios from 'axios';
+
 export default {
   name: "GetDataFromBank",
-  props:['currencies'],
-  data(){
-    return{
-      api: 'https://www.nbrb.by/api/exrates/currencies',
+  props: ['currencies'],
+  data() {
+    return {
+      api: 'https://www.nbrb.by/api/exrates/rates',
       data: null,
       listOfCurriencies: this.currencies,
+      finishData: []
 
     }
   },
   methods: {
     getList() {
-      axios.get(this.api).then((response) => {
-        this.data = response.data
-        console.log(response.data)
+      this.listOfCurriencies.forEach((el)=>{
+        let address = this.api+'/'+ el.curId
+        axios.get(address).then((response) => {
+          if(response.data) this.finishData.push(response.data)
+          console.log(response.data)
+        })
       })
+
 
     }
   }

@@ -1,26 +1,24 @@
 <template>
   <h1 class="text-3xl text-center font-bold">Currency rate</h1>
   <!--{{currencies}}-->
-<!-- {{currencyList }}-->
+  <!--  {{currencyList }}-->
   <div class="container  mx-auto ">
     <div class="flex items-start mb-4 flex-col">
       <label class="text-xl font-bold text-left">Filter: {{ searchText }}
-        <input tupe="text" v-model="searchText"
+        <input tupe="text" v-model="searchText" @input="currencyFilter"
                class="w-[200px] text-base py-1 px-2 border border-1 border-blue-100">
       </label>
       <h2 class="text-xl font-bold text-left">Select currency:</h2>
     </div>
     <div class="flex flex-col items-start h-[30vh] overflow-hidden border border-1 border-gray-300 p-2 overflow-y-auto">
-      <template v-for="val in dataFilter" :key="val.Cur_ID">
-        <label >
-          <input type="checkbox"
-                 :name="labelName"
-                 :value="val.Cur_Name"
-                 :checked="val.Cur_Name == value"
-                 @change="getCurrencyToList(val)">
-          {{ val.Cur_Name }} - {{ val.Cur_Abbreviation }} | Code - {{ val.Cur_Code }}
-        </label>
-      </template>
+      <label v-for="val in dataFilter" :key="val.Cur_Name">
+        <input type="checkbox"
+               :name="labelName"
+               :value="val.Cur_Name"
+               :checked="val.Cur_Name == value"
+               @change="getCurrencyToList(val)">
+        {{ val.Cur_Name }} - {{ val.Cur_Abbreviation }} | Code -  {{ val.Cur_Code }}
+      </label>
     </div>
   </div>
 
@@ -42,7 +40,7 @@ export default {
       selectedCurrency: null,
       currencyBankAddress: 'https://www.nbrb.by/api/exrates/currencies',
       currencyList: null,
-      dataFilter: [],
+      dataFilter: null,
       currencies: [],
     }
   },
@@ -54,44 +52,54 @@ export default {
       })
     }
   },
-  watch: {
-    searchText(val) {
-      let data = null
-      this.dataFilter = []
-      if (val.length > 0) {
-        data = this.currencyList.filter(el => {
-          if (el.Cur_Abbreviation.toLowerCase().includes(val.toLowerCase())) {
+  computed: {
+    currencyFilter() {
+      if (this.searchText) {
+        this.dataFilter = null
+        this.dataFilter = this.currencyList.filter((el) => {
+          let searchNameElement = el.Cur_Name.toLowerCase()
+          //let searchCodeElement = el.Cur_Code.toLowerCase()
+          let searchAbbrElement = el.Cur_Abbreviation.toLowerCase()
+          let inputElement = this.searchText.toLowerCase()
+          if (searchNameElement === inputElement) {
             return el
           }
-          if (el.Cur_Name.toLowerCase().includes(val.toLowerCase())) {
+          // if (searchCodeElement === inputElement) {
+          //   return el
+          // }
+          if (searchAbbrElement === inputElement) {
             return el
           }
-          if (el.Cur_Code.toLowerCase().includes(val.toLowerCase())) {
+          if (searchNameElement.includes(inputElement)) {
+            return el
+          }
+
+          // if (searchCodeElement.includes(inputElement)) {
+          //   return el
+          // }
+
+          if (searchAbbrElement.includes(inputElement)) {
             return el
           }
         })
-      } else {
-        data = this.currencyList
-      }
-      this.dataFilter = data
-    }
-  },
-  computed: {
 
+      } else {
+        this.dataFilter = this.currencyList
+      }
+    }
   },
   methods: {
     getCurrencyToList(val) {
-      if (!this.currencies.find(el => el.curId === val.Cur_ID)) {
+      if(!this.currencies.find(el => el.curCode === val.Cur_Code)) {
         this.currencies.push({
-          curId: val.Cur_ID,
           curCode: val.Cur_Code,
           curName: val.Cur_Name,
           curAbbr: val.Cur_Abbreviation,
           curScale: val.Cur_Scale
         })
-      } else {
-        let indexOfData = this.currencies.findIndex(el => el.curId === val.Cur_ID)
-        this.currencies.splice(indexOfData, 1)
+      }else{
+       let indexOfData =  this.currencies.findIndex(el => el.curCode === val.Cur_Code)
+        this.currencies.splice(indexOfData,1)
       }
     }
   },
