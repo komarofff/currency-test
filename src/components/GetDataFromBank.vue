@@ -1,10 +1,11 @@
 <template>
- {{ listOfCurriencies }}
+<!-- {{ listOfCurriencies }}-->
   <p class="my-4">
     <button @click="getList()" class="bg-blue-700 text-white py-2 px-4 rounded "> Get data from bank</button>
   </p>
-  <div v-for="item in finishData">{{ item }}
-  </div>
+  response.data={{finishData}}
+<!--  <div v-for="item in finishData">{{ item }}-->
+<!--  </div>-->
 </template>
 
 <script>

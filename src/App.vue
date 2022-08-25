@@ -1,6 +1,7 @@
 <template :key="appNumber">
   <h1 class="text-3xl text-center font-bold">Currency rate</h1>
-{{dataFromServer}}
+  dataFromServer -{{ dataFromServer }}<br>
+  currencies- {{ currencies }}
   <!-- {{currencyList }}-->
   <div class="container  mx-auto ">
     <div class="grid grid-cols-2 gap-4 items-end">
@@ -36,7 +37,8 @@
             class="flex flex-col items-start h-[30vh] overflow-hidden border border-1 border-gray-300 p-2 overflow-y-auto">
           <template v-for="val in currencies" :key="val.curId">
             <p class="flex items-center">
-              <svg @click="delCurrencyToList(val)" xmlns="http://www.w3.org/2000/svg" class="stroke-red-700 mb-1 cursor-pointer mr-3" width="24"
+              <svg @click="delCurrencyToList(val)" xmlns="http://www.w3.org/2000/svg"
+                   class="stroke-red-700 mb-1 cursor-pointer mr-3" width="24"
                    height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
                    stroke-linecap="round" stroke-linejoin="round">
                 <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
@@ -73,7 +75,7 @@ export default {
       currencyList: null,
       dataFilter: [],
       currencies: [],
-      dataFromServer: null
+      dataFromServer: []
     }
   },
   beforeMount() {
@@ -106,9 +108,7 @@ export default {
       this.dataFilter = data
     }
   },
-  computed: {
-
-  },
+  computed: {},
   methods: {
     getCurrencyToList(val) {
       if (!this.currencies.find(el => el.curId === val.Cur_ID)) {
@@ -132,13 +132,15 @@ export default {
         let indexOfData = this.currencies.findIndex(el => el.curId === val.curId)
         this.currencies.splice(indexOfData, 1)
         let id = `ID${val.curId}`
-        document.getElementById(id).checked = false
+        if (document.getElementById(id)) document.getElementById(id).checked = false
       }
     },
-    PutFinishData(val){
-      console.log('555==',val)
+    PutFinishData(val) {
+      console.log({...val})
+
       this.appNumber++
       this.dataFromServer = val
+
 
     }
 
