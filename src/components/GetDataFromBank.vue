@@ -26,11 +26,14 @@ export default {
   methods: {
     getList() {
       this.listOfCurriencies.forEach((el)=>{
-        let address = this.api+'/'+ el.curId
-        axios.get(address).then((response) => {
-          if(response.data) this.finishData.push(response.data)
-          console.log(response.data)
-        })
+        let address = this.api+'/'+ el.curCode+'?parammode=1'
+        if(axios.get(address)) {
+          axios.get(address).then((response) => {
+            if (response.data) {
+              this.finishData.push(response.data)
+            }
+          })
+        }
       })
 
 
