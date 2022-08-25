@@ -1,10 +1,8 @@
-<template :key="appNumber">
+<template :key="appNumber" >
+<div class="px-4">
   <h1 class="text-3xl text-center font-bold">Currency rate</h1>
-<!--  dataFromServer -{{ dataFromServer }}<br>-->
-<!--selected   currencies- {{ currencies }}-->
-  <!-- {{currencyList }}-->
   <div class="container  mx-auto ">
-    <div class="grid grid-cols-2 gap-4 items-end">
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 items-end">
       <section>
         <div class="flex items-start mb-4 flex-col">
           <label class="text-xl font-bold text-left">Filter:
@@ -14,17 +12,18 @@
           <h2 class="text-xl font-bold text-left">Select currency:</h2>
         </div>
         <div
-            class="flex flex-col items-start h-[30vh] overflow-hidden border border-1 border-gray-300 p-2 overflow-y-auto">
+            class="flex flex-col items-start h-[40vh] lg:h-[70vh] overflow-hidden border border-1 border-gray-300 p-2 overflow-y-auto text-left">
           <template v-for="val in dataFilter" :key="val.Cur_ID">
-            <label>
-              <input type="checkbox"
+            <label >
+              <input  type="checkbox"
                      :name="val.Cur_Abbreviation"
                      :id="'ID'+val.Cur_ID"
                      :value="val.Cur_Name"
                      @change="getCurrencyToList(val)"
                      :checked="false"
               >
-              {{ val.Cur_Name }} - {{ val.Cur_Abbreviation }} | Code - {{ val.Cur_Code }}
+              {{ val.Cur_Name }} - {{ val.Cur_Abbreviation }}
+
             </label>
           </template>
         </div>
@@ -34,11 +33,11 @@
           <h2 class="text-xl font-bold text-left">Selected currency:</h2>
         </div>
         <div
-            class="flex flex-col items-start h-[30vh] overflow-hidden border border-1 border-gray-300 p-2 overflow-y-auto">
+            class="flex flex-col items-start h-[40vh] lg:h-[70vh] overflow-hidden border border-1 border-gray-300 p-2 overflow-y-auto">
           <template v-for="val in currencies" :key="val.curId">
-            <p class="flex items-center">
+            <p class="flex items-start text-left py-1 border-1 border-b border-gray-100 w-full">
               <svg @click="delCurrencyToList(val)" xmlns="http://www.w3.org/2000/svg"
-                   class="stroke-red-700 mb-1 cursor-pointer mr-3" width="24"
+                   class="stroke-red-700 mb-1 cursor-pointer mr-3 min-w-[24px]" width="24"
                    height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
                    stroke-linecap="round" stroke-linejoin="round">
                 <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
@@ -47,11 +46,10 @@
                 <path d="M9 7v-3a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v3"></path>
                 <path d="M10 12l4 4m0 -4l-4 4"></path>
               </svg>
-              <span> {{ val.curName }} 
+              <span> {{ val.curName }}
                 <template v-if="val.finishRate">
-               |  за {{val.finishScale}}  {{val.finishName}}  -  {{val.finishRate}} BLR
+               |  за {{ val.finishScale }}  {{ val.finishName }}  -  {{ val.finishRate }} BLR
                 </template>
-<!--                <template v-else>| Курс отсутствует</template>-->
 
               </span>
             </p>
@@ -63,7 +61,7 @@
 
   <GetDataFromBank :currencies="currencies" @getData="PutFinishData"></GetDataFromBank>
 
-
+</div>
 </template>
 
 <script>
@@ -87,7 +85,8 @@ export default {
   beforeMount() {
     if (this.currencyList == null) {
       axios.get(this.currencyBankAddress).then((response) => {
-        this.currencyList =response.data
+        let arr = response.data
+        this.currencyList = response.data
         this.dataFilter = response.data
       })
     }
@@ -147,15 +146,15 @@ export default {
       }
     },
     PutFinishData(val) {
-      if(!this.dataFromServer.find(elem => elem.Cur_ID === val.Cur_ID)) {
+      if (!this.dataFromServer.find(elem => elem.Cur_ID === val.Cur_ID)) {
         this.dataFromServer.push(val)
       }
       let indexOfData = this.currencies.findIndex(el => el.curAbbr === val.Cur_Abbreviation)
-     if(indexOfData !==null && indexOfData !== -1){
-       this.currencies[indexOfData].finishRate = val.Cur_OfficialRate
-       this.currencies[indexOfData].finishName = val.Cur_Name
-       this.currencies[indexOfData].finishScale = val.Cur_Scale
-     }
+      if (indexOfData !== null && indexOfData !== -1) {
+        this.currencies[indexOfData].finishRate = val.Cur_OfficialRate
+        this.currencies[indexOfData].finishName = val.Cur_Name
+        this.currencies[indexOfData].finishScale = val.Cur_Scale
+      }
       this.appNumber++
     }
 
@@ -173,6 +172,5 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  margin-top: 60px;
 }
 </style>

@@ -1,12 +1,7 @@
 <template>
-<!-- {{ listOfCurriencies }}-->
   <p class="my-4">
     <button @click="getList()" class="bg-blue-700 text-white py-2 px-4 rounded "> Get data from bank</button>
   </p>
-<!--  response.data={{finishData}}<br>-->
-<!--  listOfCurriencies- {{listOfCurriencies}}-->
-<!--  <div v-for="item in finishData">{{ item }}-->
-<!--  </div>-->
 </template>
 
 <script>
@@ -34,11 +29,14 @@ export default {
               this.finishData.push(response.data)
               this.$emit('getData',response.data)
             }
+
+          }).catch((error) => {
+            if(error.response && error.response.status === 404) {
+              console.clear();
+            }
           })
 
       })
-      //if(this.finishData){this.$emit('getData',this.finishData)}
-
 
     }
   }
