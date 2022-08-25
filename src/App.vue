@@ -1,7 +1,7 @@
 <template :key="appNumber">
   <h1 class="text-3xl text-center font-bold">Currency rate</h1>
-  dataFromServer -{{ dataFromServer }}<br>
-  currencies- {{ currencies }}
+<!--  dataFromServer -{{ dataFromServer }}<br>-->
+<!--selected   currencies- {{ currencies }}-->
   <!-- {{currencyList }}-->
   <div class="container  mx-auto ">
     <div class="grid grid-cols-2 gap-4 items-end">
@@ -47,7 +47,13 @@
                 <path d="M9 7v-3a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v3"></path>
                 <path d="M10 12l4 4m0 -4l-4 4"></path>
               </svg>
-              <span> {{ val.curName }} - {{ val.curAbbr }} | Code - {{ val.curCode }}</span>
+              <span> {{ val.curName }} 
+                <template v-if="val.finishRate">
+               |  за {{val.finishScale}}  {{val.finishName}}  -  {{val.finishRate}} BLR
+                </template>
+<!--                <template v-else>| Курс отсутствует</template>-->
+
+              </span>
             </p>
           </template>
         </div>
@@ -81,7 +87,7 @@ export default {
   beforeMount() {
     if (this.currencyList == null) {
       axios.get(this.currencyBankAddress).then((response) => {
-        this.currencyList = response.data
+        this.currencyList =response.data
         this.dataFilter = response.data
       })
     }
@@ -134,14 +140,23 @@ export default {
         let id = `ID${val.curId}`
         if (document.getElementById(id)) document.getElementById(id).checked = false
       }
+      if (this.dataFromServer.find(el => el.Cur_Abbreviation === val.curAbbr)) {
+        let indexOfData = this.dataFromServer.findIndex(el => el.Cur_Abbreviation === val.curAbbr)
+        this.dataFromServer.splice(indexOfData, 1)
+
+      }
     },
     PutFinishData(val) {
-      console.log({...val})
-
+      if(!this.dataFromServer.find(elem => elem.Cur_ID === val.Cur_ID)) {
+        this.dataFromServer.push(val)
+      }
+      let indexOfData = this.currencies.findIndex(el => el.curAbbr === val.Cur_Abbreviation)
+     if(indexOfData !==null && indexOfData !== -1){
+       this.currencies[indexOfData].finishRate = val.Cur_OfficialRate
+       this.currencies[indexOfData].finishName = val.Cur_Name
+       this.currencies[indexOfData].finishScale = val.Cur_Scale
+     }
       this.appNumber++
-      this.dataFromServer = val
-
-
     }
 
   },
