@@ -4,7 +4,7 @@
 <!-- {{currencyList }}-->
   <div class="container  mx-auto ">
     <div class="flex items-start mb-4 flex-col">
-      <label class="text-xl font-bold text-left">Filter: {{ searchText }}
+      <label class="text-xl font-bold text-left">Filter:
         <input tupe="text" v-model="searchText"
                class="w-[200px] text-base py-1 px-2 border border-1 border-blue-100">
       </label>
