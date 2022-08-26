@@ -22,7 +22,7 @@
                      @change="getCurrencyToList(val)"
                      :checked="false"
               >
-              {{ val.Cur_Name }} - {{ val.Cur_Abbreviation }}
+              {{ val.Cur_Name }} - {{ val.Cur_Abbreviation }} - {{ val.Cur_Code }}
 
             </label>
           </template>

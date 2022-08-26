@@ -23,17 +23,20 @@ export default {
       this.finishData = []
       this.listOfCurriencies.forEach((el) => {
         let address = this.api + '/' + el.curCode + '?parammode=1'
-          axios.get(address).then((response) => {
+
+        axios.get(address).then((response) => {
+          console.log(response)
+          if (response.status === 200) {
             if (response.data) {
               this.finishData.push(response.data)
-              this.$emit('getData',response.data)
+              this.$emit('getData', response.data)
             }
-
-          }).catch((error) => {
-            if(error.response && error.response.status === 404) {
-              console.clear();
-            }
-          })
+          }
+        }).catch((error) => {
+          if (error.response && error.response.status === 404) {
+            console.clear();
+          }
+        })
 
       })
 
