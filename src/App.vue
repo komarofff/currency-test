@@ -1,65 +1,70 @@
-<template :key="appNumber" >
-<div class="px-4">
-  <h1 class="text-3xl text-center font-bold">Currency rate</h1>
-  <div class="container  mx-auto ">
-    <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 items-end">
-      <section>
-        <div class="flex items-start mb-4 flex-col">
-          <label class="text-xl font-bold text-left">Filter:
-            <input type="text" v-model="searchText"
-                   class="w-[200px] text-base py-1 px-2 border border-1 border-blue-100">
-          </label>
-          <h2 class="text-xl font-bold text-left">Select currency:</h2>
-        </div>
-        <div
-            class="flex flex-col items-start h-[40vh] lg:h-[70vh] overflow-hidden border border-1 border-gray-300 p-2 overflow-y-auto text-left">
-          <template v-for="val in dataFilter" :key="val.Cur_ID">
-            <label >
-              <input  type="checkbox"
-                     :name="val.Cur_Abbreviation"
-                     :id="'ID'+val.Cur_ID"
-                     :value="val.Cur_Name"
-                     @change="getCurrencyToList(val)"
-                     :checked="false"
-              >
-              {{ val.Cur_Name }} - {{ val.Cur_Abbreviation }} - {{ val.Cur_Code }}
-
+<template :key="appNumber">
+  <div class="px-4">
+    <h1 class="text-3xl text-center font-bold">Currency rate</h1>
+    <div class="container  mx-auto ">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 items-end">
+        <section>
+          <div class="flex items-start mb-4 flex-col">
+            <label class="text-xl font-bold text-left">Select date
+              <input type="date" v-model="date" :max="maxDate" @input="newDate"
+                     class="w-[200px] text-base py-1 px-2 border border-1 border-blue-100">
             </label>
-          </template>
-        </div>
-      </section>
-      <section>
-        <div class="flex items-start mb-4 flex-col">
-          <h2 class="text-xl font-bold text-left">Selected currency:</h2>
-        </div>
-        <div
-            class="flex flex-col items-start h-[40vh] lg:h-[70vh] overflow-hidden border border-1 border-gray-300 p-2 overflow-y-auto">
-          <template v-for="val in currencies" :key="val.curId">
-            <p class="flex items-start text-left py-1 border-1 border-b border-gray-100 w-full">
-              <svg @click="delCurrencyToList(val)" xmlns="http://www.w3.org/2000/svg"
-                   class="stroke-red-700 mb-1 cursor-pointer mr-3 min-w-[24px]" width="24"
-                   height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
-                   stroke-linecap="round" stroke-linejoin="round">
-                <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                <path d="M4 7h16"></path>
-                <path d="M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2 -2l1 -12"></path>
-                <path d="M9 7v-3a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v3"></path>
-                <path d="M10 12l4 4m0 -4l-4 4"></path>
-              </svg>
-              <span> {{ val.curName }}
+
+            <label class="text-xl font-bold text-left">Filter:
+              <input type="text" v-model="searchText"
+                     class="w-[200px] text-base py-1 px-2 border border-1 border-blue-100">
+            </label>
+            <h2 class="text-xl font-bold text-left">Select currency:</h2>
+          </div>
+          <div
+              class="flex flex-col items-start h-[40vh] lg:h-[70vh] overflow-hidden border border-1 border-gray-300 p-2 overflow-y-auto text-left">
+            <template v-for="val in dataFilter" :key="val.Cur_ID">
+              <label>
+                <input type="checkbox"
+                       :name="val.Cur_Abbreviation"
+                       :id="'ID'+val.Cur_ID"
+                       :value="val.Cur_Name"
+                       @change="getCurrencyToList(val)"
+                       :checked="false"
+                >
+                {{ val.Cur_Name }} - {{ val.Cur_Abbreviation }} - {{ val.Cur_Code }}
+
+              </label>
+            </template>
+          </div>
+        </section>
+        <section>
+          <div class="flex items-start mb-4 flex-col">
+            <h2 class="text-xl font-bold text-left">Selected currency:</h2>
+          </div>
+          <div
+              class="flex flex-col items-start h-[40vh] lg:h-[70vh] overflow-hidden border border-1 border-gray-300 p-2 overflow-y-auto">
+            <template v-for="val in currencies" :key="val.curId">
+              <p class="flex items-start text-left py-1 border-1 border-b border-gray-100 w-full">
+                <svg @click="delCurrencyToList(val)" xmlns="http://www.w3.org/2000/svg"
+                     class="stroke-red-700 mb-1 cursor-pointer mr-3 min-w-[24px]" width="24"
+                     height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
+                     stroke-linecap="round" stroke-linejoin="round">
+                  <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                  <path d="M4 7h16"></path>
+                  <path d="M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2 -2l1 -12"></path>
+                  <path d="M9 7v-3a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v3"></path>
+                  <path d="M10 12l4 4m0 -4l-4 4"></path>
+                </svg>
+                <span> {{ val.curName }}
                 <template v-if="val.finishRate">
                |  за {{ val.finishScale }}  {{ val.finishName }}  -  {{ val.finishRate }} BLR
                 </template>
 
               </span>
-            </p>
-          </template>
-        </div>
-      </section>
+              </p>
+            </template>
+          </div>
+        </section>
+      </div>
     </div>
+    <GetDataFromBank :currencies="currencies" :date="date" @getData="PutFinishData" :key="appKey"></GetDataFromBank>
   </div>
-  <GetDataFromBank :currencies="currencies" @getData="PutFinishData"></GetDataFromBank>
-</div>
 </template>
 
 <script>
@@ -70,6 +75,9 @@ export default {
   name: 'App',
   data() {
     return {
+      appKey: 0,
+      date: new Date().getFullYear() + '-' + ('0' + (new Date().getMonth() + 1)).slice(-2) + '-' + ('0' + (new Date().getDate())).slice(-2),
+      maxDate: new Date().getFullYear() + '-' + ('0' + (new Date().getMonth() + 1)).slice(-2) + '-' + ('0' + (new Date().getDate())).slice(-2),
       appNumber: 0,
       searchText: null,
       selectedCurrency: null,
@@ -111,8 +119,15 @@ export default {
       this.dataFilter = data
     }
   },
-  computed: {},
+  computed: {
+    newDate(val) {
+      console.log(this.date)
+      this.appKey++
+      this.appNumber++
+    },
+  },
   methods: {
+
     getCurrencyToList(val) {
       if (!this.currencies.find(el => el.curId === val.Cur_ID)) {
         this.currencies.push({

@@ -1,4 +1,5 @@
 <template>
+  {{thisDate}}
   <p class="my-4">
     <button @click="getList()" class="bg-blue-700 text-white py-2 px-4 rounded "> Get data from bank</button>
   </p>
@@ -9,10 +10,12 @@ import axios from 'axios';
 
 export default {
   name: "GetDataFromBank",
-  props: ['currencies'],
+  props: ['currencies','date'],
+  inject:['dateProps'],
   emits: ['getData'],
   data() {
     return {
+      thisDate : this.date,
       api: 'https://www.nbrb.by/api/exrates/rates',
       listOfCurriencies: this.currencies,
       finishData: []
@@ -22,7 +25,7 @@ export default {
     getList() {
       this.finishData = []
       this.listOfCurriencies.forEach((el) => {
-        let address = this.api + '/' + el.curCode + '?parammode=1'
+        let address = this.api + '/' + el.curCode +'?parammode=1'+'&ondate='+ this.thisDate
 
         axios.get(address).then((response) => {
           console.log(response)
