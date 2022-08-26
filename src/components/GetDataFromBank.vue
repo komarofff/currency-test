@@ -1,5 +1,4 @@
 <template>
-  {{thisDate}}
   <p class="my-4">
     <button @click="getList()" class="bg-blue-700 text-white py-2 px-4 rounded "> Get data from bank</button>
   </p>
@@ -11,7 +10,6 @@ import axios from 'axios';
 export default {
   name: "GetDataFromBank",
   props: ['currencies','date'],
-  inject:['dateProps'],
   emits: ['getData'],
   data() {
     return {

@@ -1,23 +1,26 @@
 <template :key="appNumber">
-  <div class="px-4">
+  <div class="px-4 mt-3">
     <h1 class="text-3xl text-center font-bold">Currency rate</h1>
     <div class="container  mx-auto ">
-      <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 items-end">
+      <div class="mt-3">
+        <label class="text-xl font-bold text-left ">Select date
+          <input type="date" v-model="date" :max="maxDate"
+                 class="w-[200px] text-base py-1 px-2 border border-1 border-blue-100">
+        </label>
+      </div>
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 items-end lg:mt-0 mt-4">
         <section>
-          <div class="flex items-start mb-4 flex-col">
-            <label class="text-xl font-bold text-left">Select date
-              <input type="date" v-model="date" :max="maxDate" @input="newDate"
-                     class="w-[200px] text-base py-1 px-2 border border-1 border-blue-100">
-            </label>
-
-            <label class="text-xl font-bold text-left">Filter:
-              <input type="text" v-model="searchText"
-                     class="w-[200px] text-base py-1 px-2 border border-1 border-blue-100">
-            </label>
-            <h2 class="text-xl font-bold text-left">Select currency:</h2>
+          <div class="flex items-start mb-2 flex-col">
+            <div class="flex items-center justify-start flex-wrap">
+              <h2 class="text-xl font-bold text-left mr-6 mb-0">Select currency:</h2>
+              <label class="text-xl font-bold text-left flex items-center justify-start">Filter
+                <input type="text" v-model="searchText"
+                       class="w-[200px] text-base py-1 px-2 border border-1 border-blue-100 ml-2">
+              </label>
+            </div>
           </div>
           <div
-              class="flex flex-col items-start h-[40vh] lg:h-[70vh] overflow-hidden border border-1 border-gray-300 p-2 overflow-y-auto text-left">
+              class="flex flex-col items-start h-[40vh] lg:h-[60vh] overflow-hidden border border-1 border-gray-300 p-2 overflow-y-auto text-left">
             <template v-for="val in dataFilter" :key="val.Cur_ID">
               <label>
                 <input type="checkbox"
@@ -34,11 +37,11 @@
           </div>
         </section>
         <section>
-          <div class="flex items-start mb-4 flex-col">
+          <div class="flex items-start mb-2 flex-col">
             <h2 class="text-xl font-bold text-left">Selected currency:</h2>
           </div>
           <div
-              class="flex flex-col items-start h-[40vh] lg:h-[70vh] overflow-hidden border border-1 border-gray-300 p-2 overflow-y-auto">
+              class="flex flex-col items-start h-[40vh] lg:h-[60vh] overflow-hidden border border-1 border-gray-300 p-2 overflow-y-auto">
             <template v-for="val in currencies" :key="val.curId">
               <p class="flex items-start text-left py-1 border-1 border-b border-gray-100 w-full">
                 <svg @click="delCurrencyToList(val)" xmlns="http://www.w3.org/2000/svg"
@@ -117,15 +120,13 @@ export default {
         data = this.currencyList
       }
       this.dataFilter = data
-    }
-  },
-  computed: {
-    newDate(val) {
-      console.log(this.date)
+    },
+    date() {
       this.appKey++
       this.appNumber++
-    },
+    }
   },
+  computed: {},
   methods: {
 
     getCurrencyToList(val) {
